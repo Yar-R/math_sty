@@ -1,0 +1,144 @@
+%author: Rebenko Yaroslav yarebenko@gmail.com
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+
+\usepackage{mathtools}
+
+\usepackage{dsfont}
+\usepackage{color}
+
+\usepackage{iflang}
+
+\newcommand{\ifRussian}[2]{\IfLanguageName{russian}{#1}{#2}}
+
+%misc
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\newcommand{\isom}{\simeq}
+\newcommand{\cisom}{\simeq}
+\newcommand{\tens}{\otimes}
+
+\newcommand{\br}[1]{\left( #1 \right)}
+\newcommand{\sbr}[1]{\left[ #1 \right]}
+\newcommand{\cbr}[1]{\left\{ #1 \right\}}
+\newcommand{\vbr}[1]{\left\langle #1 \right\rangle}
+
+\DeclareMathOperator{\avg}{avg}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\seq}[3]{#1_#2,\cdots,#1_#3}
+\newcommand{\ow}{\ifRussian{\text{иначе}}{\text{otherwise}}}
+\newcommand{\st}{\mid}
+\newcommand{\builds}{\vdash}
+\newcommand{\sgn}[1]{\text{sgn}\br{#1}}
+
+%vcs
+\definecolor{gr}{rgb}{0.5,0.5,0.5}
+\newcommand{\old}{\color{gr}}
+\newcommand{\new}{\color{black}}
+\newcommand{\problem}[1]{\new\textbf{#1}\old}
+
+%sets
+\newcommand{\svoid}{\varnothing}
+\newcommand{\sN}{\mathds{N}}
+\newcommand{\sNo}{\mathds{N}_0}
+\newcommand{\sZ}{\mathds{Z}}
+\newcommand{\sQ}{\mathds{Q}}
+\newcommand{\sR}{\mathds{R}}
+\newcommand{\sC}{\mathds{C}}
+\newcommand{\sH}{\mathds{H}}
+
+\newcommand{\sand}{\bigcap}
+\newcommand{\sdand}{\sqcap}
+\newcommand{\sor}{\bigcup}
+\newcommand{\sdor}{\sqcup}
+\newcommand{\smin}{\setminus}
+\newcommand{\sxor}{\triangle}
+
+\newcommand{\size}[1]{\left| #1 \right|}
+
+%logics
+\newcommand{\sleq}{\subset}
+\newcommand{\sle}{\subsetneq}
+\newcommand{\sgeq}{\supset}
+\newcommand{\sgr}{\supsetneq}
+
+\newcommand{\so}{\Rightarrow}
+
+%ceil
+\newcommand{\ubound}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\lbound}[1]{\left\lfloor #1 \right\rfloor}
+
+%arrays
+\newcommand{\at}[1]{\left[ #1 \right]}
+
+%probarility
+\newcommand{\var}[1]{\mathbb{D}\sbr{#1}}
+\newcommand{\mean}[1]{\mathbb{E}\sbr{#1}}
+\newcommand{\prob}[1]{\mathbb{P}\sbr{#1}}
+
+%linalg
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\cen}[1]{\text{cen}\br{#1}}
+\newcommand{\Mat}[1]{\text{Mat}\br{#1}}
+\newcommand{\Cl}{\mathcal{C}\ell}
+
+%counters/sections
+\makeatletter
+\def\renewtheorem#1{
+  \expandafter\let\csname#1\endcsname\relax
+  \expandafter\let\csname c@#1\endcsname\relax
+  \gdef\renewtheorem@envname{#1}
+  \renewtheorem@secpar
+}
+\def\renewtheorem@secpar{\@ifnextchar[{\renewtheorem@numberedlike}{\renewtheorem@nonumberedlike}}
+\def\renewtheorem@numberedlike[#1]#2{\newtheorem{\renewtheorem@envname}[#1]{#2}}
+\def\renewtheorem@nonumberedlike#1{  
+\def\renewtheorem@caption{#1}
+\edef\renewtheorem@nowithin{\noexpand\newtheorem{\renewtheorem@envname}{\renewtheorem@caption}}
+\renewtheorem@thirdpar
+}
+\def\renewtheorem@thirdpar{\@ifnextchar[{\renewtheorem@within}{\renewtheorem@nowithin}}
+\def\renewtheorem@within[#1]{\renewtheorem@nowithin[#1]}
+\makeatother
+
+\newcommand\updateTheoremCounter[2]{
+    \csname_update_#1_counter_\endcsname{#2}
+}
+
+\newcommand{\newTheoremEnv}[4]{
+    \expandafter\newcommand\csname_update_#1_counter_\endcsname[1]{
+        \renewtheorem{#1}{\ifRussian{#2}{#3}}[##1]
+    }
+    \renewtheorem{#1}{\ifRussian{#2}{#3}}[#4]
+}
+
+
+\renewcommand\thepart{\arabic{part}}
+\theoremstyle{definition}
+
+\newTheoremEnv{definition}{Определение}{Definition}{part}
+\newTheoremEnv{theorem}{Теорема}{Theorem}{part}
+\newTheoremEnv{corollary}{Следствие}{Corollary}{theorem}
+\newTheoremEnv{mention}{Замечание}{Mention}{part}
+\newTheoremEnv{lemma}{Лемма}{Lemma}{theorem}
+\newTheoremEnv{method}{Метод}{Method}{theorem}
+\newTheoremEnv{example}{Пример}{Example}{part}
+\newTheoremEnv{exersise}{Упражнение}{Exersise}{part}
+\newTheoremEnv{Problem}{Задача}{Problem}{part}
+
+
+%% Proof
+\renewcommand\qedsymbol{$\blacksquare$}
+\renewenvironment{proof}{\par
+\pushQED{\qed}
+\normalfont \topsep6\p@\@plus6\p@\relax
+\trivlist
+\item\relax
+{\itshape
+\ifRussian{Док-во}{Proof}\@addpunct{.}}\hspace\labelsep\ignorespaces
+}{
+\popQED\endtrivlist\@endpefalse
+}
