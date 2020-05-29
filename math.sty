@@ -8,9 +8,11 @@
 \usepackage{mathtools}
 
 \usepackage{dsfont}
-\usepackage{color}
+
+\usepackage{scalerel,stackengine}
 
 \usepackage{iflang}
+
 
 \newcommand{\ifRussian}[2]{\IfLanguageName{russian}{#1}{#2}}
 
@@ -25,20 +27,29 @@
 \newcommand{\sbr}[1]{\left[ #1 \right]}
 \newcommand{\cbr}[1]{\left\{ #1 \right\}}
 \newcommand{\vbr}[1]{\left\langle #1 \right\rangle}
+\newcommand{\bra}[1]{\left\langle #1 \right|}
+\newcommand{\ket}[1]{\left| #1 \right\rangle}
+\newcommand{\braket}[2]{\left\langle #1 \middle| #2 \right\rangle}
 
 \DeclareMathOperator{\avg}{avg}
+
 \newcommand{\abs}[1]{\left| #1 \right|}
 \newcommand{\seq}[3]{#1_#2,\cdots,#1_#3}
 \newcommand{\ow}{\ifRussian{\text{иначе}}{\text{otherwise}}}
 \newcommand{\st}{\mid}
 \newcommand{\builds}{\vdash}
 \newcommand{\sgn}[1]{\text{sgn}\br{#1}}
-
-%vcs
-\definecolor{gr}{rgb}{0.5,0.5,0.5}
-\newcommand{\old}{\color{gr}}
-\newcommand{\new}{\color{black}}
-\newcommand{\problem}[1]{\new\textbf{#1}\old}
+\stackMath
+\newcommand\reallywidehat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern.1pt\mathchar"0362\kern.1pt}%
+    {\rule{0ex}{\textheight}}%WIDTH-LIMITED CIRCUMFLEX
+  }{\textheight}% 
+}{2.4ex}}%
+\stackon[-6.9pt]{#1}{\tmpbox}%
+}
+\parskip 1ex
 
 %sets
 \newcommand{\svoid}{\varnothing}
@@ -66,6 +77,8 @@
 \newcommand{\sgr}{\supsetneq}
 
 \newcommand{\so}{\Rightarrow}
+\newcommand{\os}{\Leftarrow}
+\newcommand{\oso}{\Leftrightarrow}
 
 %ceil
 \newcommand{\ubound}[1]{\left\lceil #1 \right\rceil}
@@ -80,10 +93,21 @@
 \newcommand{\prob}[1]{\mathbb{P}\sbr{#1}}
 
 %linalg
+\DeclareMathOperator{\Tr}{tr}
+\newcommand{\tr}[1]{\Tr\br{#1}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\cen}[1]{\text{cen}\br{#1}}
 \newcommand{\Mat}[1]{\text{Mat}\br{#1}}
 \newcommand{\Cl}{\mathcal{C}\ell}
+
+%matrix spacing
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+  \edef\arraystretch{#1}%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
 
 %counters/sections
 \makeatletter
@@ -129,16 +153,35 @@
 \newTheoremEnv{exersise}{Упражнение}{Exersise}{part}
 \newTheoremEnv{Problem}{Задача}{Problem}{part}
 
+% TODO
 
-%% Proof
-\renewcommand\qedsymbol{$\blacksquare$}
-\renewenvironment{proof}{\par
-\pushQED{\qed}
-\normalfont \topsep6\p@\@plus6\p@\relax
-\trivlist
-\item\relax
-{\itshape
-\ifRussian{Док-во}{Proof}\@addpunct{.}}\hspace\labelsep\ignorespaces
-}{
-\popQED\endtrivlist\@endpefalse
+\newcounter{TODOc}
+\newcommand{\TODO}{
+    \stepcounter{TODOc}
+    --== THIS IS A TODO ==--
 }
+\newcommand{\showTODO}{
+    TODO count: \arabic{TODOc}
+}
+
+% number theory
+
+\newcommand{\Lege}[2]{\br{\frac{#1}{#2}}}
+\newcommand{\divisible}{\mathop{\raisebox{-2pt}{\vdots}}}
+\DeclareMathOperator{\GCD}{gcd}
+\DeclareMathOperator{\LCM}{lcm}
+\DeclareMathOperator{\ord}{ord}
+\newcommand{\C}[3][1]{\begin{pmatrix}[#1]
+#2\\
+#3
+    \end{pmatrix}
+}
+
+
+
+% Proofs
+% Induction
+\newenvironment{Induction}{\begin{itemize}}{\end{itemize}}
+
+\newcommand{\IBase}{\item[\ifRussian{База:}{Base:}]}
+\newcommand{\IStep}{\item[\ifRussian{Шаг:}{Step:}]}
